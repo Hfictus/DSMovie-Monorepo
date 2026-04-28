@@ -1,6 +1,23 @@
 
 
+/*Importação do Google fonts com pesos 400 e 700*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 
 :root {
-  --color-red: red;
+  --color-primary: #4D41C0; /*Cor primária do tema*/
 }
+
+* {
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+html, body {
+    background-color: #E5E5E5;
+}
+
+a, a:hover {
+  text-decoration: none;  /*link sem decoração*/
+  color: unset;  /*link sem cor definida “setada”*/
+}
+
