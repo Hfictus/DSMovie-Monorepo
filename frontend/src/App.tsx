@@ -1,12 +1,12 @@
 
 
 
-import './App.css';
+import Header from './components/Header/index';
 
 export default function App() {
   
   return (
-    <h1>Página principal  </h1>  
-  )
+    <Header />  
+  );
 }
 
