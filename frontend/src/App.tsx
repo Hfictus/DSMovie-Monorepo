@@ -1,4 +1,3 @@
-
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Listing from './routes/Listing';
 import Form from './routes/Form';
@@ -35,10 +34,10 @@ const router = createBrowserRouter([
       {
         path: "form/:movieId",  // Rota com parâmetro dinâmico
         element: <Form />, // Injetado no <Outlet /> quando o caminho for "form/algum-id"
-      },
-    ],
-  },
-]);
+      }
+    ]
+  }
+])
 
 function App() {
   // Provedor que conecta a configuração do roteador à aplicação React
@@ -46,4 +45,3 @@ function App() {
 }
 
 export default App;
-
