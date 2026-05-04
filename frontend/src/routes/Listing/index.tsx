@@ -1,4 +1,4 @@
-
+/*Os cards, MovieCard, são organizados na página com classes CSS com Bootstrap*/
 
 import Pagination from '../../components/Pagination';
 import MovieCard from '../../components/MovieCard';

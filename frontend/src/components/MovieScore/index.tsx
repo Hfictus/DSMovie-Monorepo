@@ -1,3 +1,4 @@
+/*Componente atômico*/
 
 import MovieStars from "../MovieStars";
 import './styles.css';

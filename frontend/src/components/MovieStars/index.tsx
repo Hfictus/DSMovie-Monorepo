@@ -1,3 +1,4 @@
+/*Componente atômico*/
 
 import starFull from '../../assets/star-full.svg';
 import starHalf from '../../assets/star-half.svg';

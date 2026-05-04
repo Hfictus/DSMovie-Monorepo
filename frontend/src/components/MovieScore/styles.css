@@ -1,5 +1,6 @@
 
 
+/*Evitar usar CSS para além da borda de um componente, ex.: margin.*/
 .dsmovie-score-container {
     display: flex;
     flex-direction: column;
