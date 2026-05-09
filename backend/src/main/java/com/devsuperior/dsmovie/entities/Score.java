@@ -42,7 +42,7 @@ public class Score {
 		id.setMovie(movie);
 	}
 	
-	//Associar um usuário a um score
+	//Associar um usuário a um score de um filme
 	public void setUser(User user) {
 		id.setUser(user);
 	}
