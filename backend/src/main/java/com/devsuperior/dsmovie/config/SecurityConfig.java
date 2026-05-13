@@ -24,6 +24,7 @@ public class SecurityConfig {
                 .frameOptions(frame -> frame.sameOrigin()));
 
         http.csrf(csrf -> csrf.disable());
+        
         http.cors(Customizer.withDefaults());
 
         http.sessionManagement(session ->
