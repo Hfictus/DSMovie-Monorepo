@@ -2,16 +2,18 @@
 
 import MovieStars from "../MovieStars";
 import './styles.css';
+    
+type Props = {
+    score: number;
+    count: number;
+}
 
-export default function MovieScore() {
-
-    const score = 3.5;
-    const count = 13;
-
+export default function MovieScore({ score, count }: Props) {
+    
     return(
         <div className="dsmovie-score-container">
             <p className="dsmovie-score-value">{score > 0 ? score.toFixed(1) : '-'}</p>
-            <MovieStars />
+            <MovieStars score={score} />
             <p className="dsmovie-score-count">{count} avaliações</p>
         </div>
     );
