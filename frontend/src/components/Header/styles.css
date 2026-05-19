@@ -1,4 +1,4 @@
-
+/*Evitar usar CSS para além da borda de um componente, ex.: margin.*/
 header {
     height: 60px;
     background-color: var(--color-primary);
@@ -13,6 +13,7 @@ header {
     color: #fff;
 }
 
+/*Em elementos internos de um componente, pode-se usar margin*/
 .dsmovie-nav-content h1 {
     font-size: 24px;
     margin: 0;
