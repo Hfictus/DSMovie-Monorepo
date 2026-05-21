@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: dsmovie-postgres
+    environment:
+      POSTGRES_DB: dsmovie
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234567
+    ports:
+      - "5433:5432"
+    volumes:
+      - dsmovie-postgres-data:/var/lib/postgresql/data
+    networks:
+      - dsmovie-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dsmovie"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: dsmovie-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@dsmovie.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin123
+    ports:
+      - "5051:80"
+    volumes:
+      - dsmovie-pgadmin-data:/var/lib/pgadmin
+    networks:
+      - dsmovie-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  dsmovie-postgres-data:
+  dsmovie-pgadmin-data:
+
+networks:
+  dsmovie-network:
+    driver: bridge
