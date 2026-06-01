@@ -6,7 +6,7 @@ A aplicação permite que os usuários avaliem filmes.
 
 ## Observações:
 * Foram exercitados os perfis de test e dev
-* Apesar de haver a configuração para o perfil prod, não se chegou a exercitar a implantação da aplicação em nuvem
+* Apesar de haver a configuração para o perfil prod, desta vez não se chegou a exercitar a implantação da aplicação em nuvem
 * O projeto exercitou o conceito de monorepo
 
 ## Stack
@@ -17,6 +17,7 @@ A aplicação permite que os usuários avaliem filmes.
 ### Front-end
 * React + Vite
 * TypeScript
+* Bootstrap
 
 ### Banco de Dados & Infraestrutura
 * H2 (test)
