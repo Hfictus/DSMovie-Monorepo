@@ -58,3 +58,71 @@ A aplicação permite que os usuários avaliem filmes.
 <img width="726" height="77" alt="image" src="https://github.com/user-attachments/assets/31f8c9a8-dc58-4c44-abf0-7b8d30fdc9b0" />
 <br>
 <img width="727" height="83" alt="image" src="https://github.com/user-attachments/assets/a2ad61ec-ffac-4eae-b11b-d8fbca1dcee0" />
+<br>
+
+## Instalação e Execução
+
+### Pré-requisitos
+Antes de começar, certificar-se de ter instalado:
+- Git
+- JDK 21 (para o backend)
+- Node.js 24.7.0 e Yarn 4.9.4 (para o frontend)
+- React 19 + Vite 7+
+- PostgreSQL 16 OU Docker Desktop (para o banco de dados)
+- Spring Tool Suite (STS) ou outra IDE Java 
+
+### Clonar o Repositório
+
+Opção A - Via Git:
+```
+git clone git@github.com:Hfictus/DSMovie-Monorepo.git
+cd DSMovie-Monorepo
+```
+Opção B - Download do .zip:
+1.	Baixar arquivo .zip do repositório
+2.	Extrair a pasta DSMovie-Monorepo <br>
+Configurar o Backend <br>
+Importar o projeto na IDE (STS) <br>
+1.	File → Import → Maven → Existing Maven Projects <br>
+2.	Clicar em Browse e localize a pasta backend <br>
+3.	Clicar em Selecionar Pasta (Windows) ou Open (Mac/Linux) <br>
+4.	Clicar em Finish <br>
+Configurar banco de dados (application-dev.properties) <br>
+Escolher uma das opções: <br>
+Sem Docker (PostgreSQL local na porta 5432): <br>
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/dsmovie
+```
+Certificar-se de que PostgreSQL está instalado e o banco dsmovie foi criado. <br>
+Com Docker (PostgreSQL via container na porta 5433): <br>
+```
+spring.datasource.url=jdbc:postgresql://localhost:5433/dsmovie
+```
+Certificar-se de que Docker Desktop está rodando.
+Executar o backend
+No STS, clicar em Run, ou pressionar Ctrl + Shift + F11, ou restart
+PgAdmin (gerenciar banco de dados):
+•	Sem Docker: http://localhost:5050
+•	Com Docker: http://localhost:5051 (credenciais em docker-compose.yml)
+
+Configurar o Frontend
+1.	Abrir um terminal na pasta frontend:
+```
+cd frontend
+```
+2.	Instalar as dependências:
+```
+yarn
+```
+3.	Iniciar o servidor de desenvolvimento:
+```
+yarn dev
+```
+4.	Acessar a aplicação no navegador:
+```
+http://localhost:5173
+```
+Para parar o servidor: Pressionar Ctrl + C no terminal <br>
+
+Troubleshooting <br>
+![alt text](image-1.png)
