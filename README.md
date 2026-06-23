@@ -126,3 +126,52 @@ Para parar o servidor: Pressionar Ctrl + C no terminal <br>
 
 Troubleshooting <br>
 ![alt text](image-1.png)
+
+
+
+
+## Deploy com Docker
+
+### Pré-requisitos
+* Docker e Docker Compose instalados
+* Git
+
+### Como executar
+
+1. Clonar o repositório:
+```
+git clone https://github.com/seu-usuario/DSMovie-Monorepo.git
+cd DSMovie-Monorepo
+```
+
+2. Configurar as variáveis de ambiente:
+```
+cp .env.example .env
+# Edite .env com suas senhas seguras
+```
+
+3. Iniciar os containers:
+```
+docker-compose up -d
+```
+
+4. Acesse a aplicação:
+- Backend: http://localhost:8080
+- PgAdmin: http://localhost:5051
+
+### Segurança
+
+- NUNCA fazer commit do arquivo .env
+- Usar senhas fortes e únicas para produção
+- Mudar as senhas padrão antes de fazer deploy
+- O arquivo .env.example serve apenas como referência
+
+### Estrutura do Projeto
+
+```
+├── backend/          # API Spring Boot
+├── frontend/         # Frontend (React, Vue, etc)
+├── docker-compose.yml
+├── .env.example     # Exemplo de variáveis
+└── README.md
+```
