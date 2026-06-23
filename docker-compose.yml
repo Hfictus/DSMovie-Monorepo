@@ -1,11 +1,12 @@
+version: '3.9'
 services:
   postgres:
     image: postgres:16
     container_name: dsmovie-postgres
     environment:
       POSTGRES_DB: dsmovie
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234567
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-1234567}
     ports:
       - "5433:5432"
     volumes:
@@ -18,13 +19,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: dsmovie-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@dsmovie.com
-      PGADMIN_DEFAULT_PASSWORD: pgadmin123
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@dsmovie.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-pgadmin123}
     ports:
       - "5051:80"
     volumes:
