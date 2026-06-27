@@ -36,7 +36,7 @@ function Star({ fill }: StarProps) {
         return <img src={starFull} alt="Estrela amarela toda prenxida" />
     }
     else {
-        return <img src={starHalf} alt="Estrela amarela preenxida pela metade" />
+        return <img src={starHalf} alt="Estrela amarela preenchida pela metade" />
     }
 }
 
