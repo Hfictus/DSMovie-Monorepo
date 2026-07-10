@@ -1,0 +1,16 @@
+[build]
+  # Caminho para a pasta onde o front-end está localizado no monorepo
+  base = "frontend/"
+
+  # Comando de build para React + Vite 7 + Yarn 4 (Modern)
+  command = "yarn build"
+
+  # Pasta gerada pelo Vite após o build (dentro de frontend/)
+  publish = "frontend/dist/"
+
+[build.environment]
+  # Define a versão do Node idêntica ao do ambiente de desenvolvimento local
+  NODE_VERSION = "24.7.0"
+  
+  # Especifica a versão exata do Yarn Modern para otimizar o cache e o comportamento do PnP
+  YARN_VERSION = "4.9.4"
