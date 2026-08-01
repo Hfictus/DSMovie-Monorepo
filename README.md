@@ -6,6 +6,7 @@ A aplicação permite que os usuários avaliem filmes.
 
 ## Observações:
 * Foram exercitados os perfis de test e dev para os testes locais, e prod para testes em nuvem.
+* Para detalhes sobre implantação, ver os README dos projetos backend e frontend.
 * O projeto exercitou o conceito de monorepo
 
 ## Stack
