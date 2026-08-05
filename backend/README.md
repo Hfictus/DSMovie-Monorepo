@@ -20,6 +20,8 @@ Lembrando que os valores de JDBC URL, User Name e Password estão em src/main/re
 Painel de gerenciamento do H2:
 <img width="100%" alt="Painel de gerenciamento do H2" src="./docs/assets/h2-console.png" />
 
+src/main/resources/import.sql - contém a estrutura e dados para testes com o banco de dados em memória.
+
 ### Testes com Postman para o perfil test:
 Exemplo de formato para URL:<br>
 http://localhost:8080/movies (como há busca paginada, pode-se também usar parâmetros opcionais) <br>
@@ -29,12 +31,90 @@ ou<br>
 
 ## Perfil dev:
 ### Sem Docker:
-<img width="100%" alt="" src="./docs/assets" />
-continuar aqui
+Baixar banco de dados com gerenciador (usou-se PostgreSQL + PgAdmin).<br>
+Importante: ao se instalar PostgreSQL, durante o passo a passo no instalador, é solicitada a criação de uma senha para o usuário padrão postgres (o superusuário). Essa senha sempre será usada para acessar os servidores criados e administrados através do PgAdmin.
 
+Configurar perfil dev em src/main/resources/application.properties:
+```
+# Perfil ativo (test, dev ou prod)
+spring.profiles.active=${APP_PROFILE:dev}
+```
+Executar a aplicação com as seguintes linhas descomentadas em src/main/resources/application-dev.properties, para gerar create.sql.
+```
+spring.jpa.properties.jakarta.persistence.schema-generation.create-source=metadata
+spring.jpa.properties.jakarta.persistence.schema-generation.scripts.action=create
+spring.jpa.properties.jakarta.persistence.schema-generation.scripts.create-target=create.sql
+spring.jpa.properties.hibernate.hbm2ddl.delimiter=;
+```
+Comentar novamente as linhas acima após execução.<br>
 
+Obs: sobre o banco de dados e seu gerenciador, há algumas imagens na seção Perfil prod.<br>
+
+No PgAdmin, criar servidor local e banco de dados (apenas o nome é suficiente).<br>
+Botão direito do mouse com seta sobre Servers<br>
+Register<br>
+Server<br>
+Nomear o servidor no campo Name da aba General.<br>
+
+Criar banco de dados:<br>
+Botão direito do mouse com seta sobre Servidor criado<br>
+Databases<br>
+Create<br>
+Database<br>
+Nomear no campo database da aba General.<br>
+
+Criar tabelas com dados para testes no banco de dados:<br>
+Servers > Databases > <br>
+dsmovie (exemplo de nome de banco de dados)<br>
+Schemas<br>
+public<br>
+Botão direito do mouse com seta sobre Tables<br>
+Clicar em Query Tool<br>
+Copiar o código de create.sql e executar o script clicando em Run (pode ser preciso selecionar todo o código antes)<br>
+
+Lembrar de configurar porta, usuário e senha para o banco de dados em src/main/resources/application-dev.properties:
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/dsmovie
+spring.datasource.username=postgres
+spring.datasource.password=1234567
+spring.datasource.driver-class-name=org.postgresql.Driver
+```
+A senha acima deve ser a mesma usada no momento de instalação/configuração do PostgreSQL. (1234567 foi usada em contexto de estudos).<br>
+
+Nesse momento, sempre que se executar a aplicação no perfil dev, deve ser possível acessar o banco de dados, usando requisições, por meio do Postman, por exemplo.<br>
+
+#### Usando Postman
+Baixar a aplicação do Postman.<br>
+Criar, ou importar uma coleção de requisições.<br>
+Obs: neste repositório, há o arquivo postman-requests-collection.json para demonstração.<br>
+
+host usado no Postman para as requisições para testes locais:<br>
+http://localhost:8080
+<br>
+ou<br>
+{{host}} (em caso de criação de variável de ambiente)
 
 ### Com Docker:
+No caso de se usar Docker em testes locais, considerar o seguinte:<br>
+* Instalar Docker Desktop (Windows exige WSL2)
+* Criar uma rede com docker-compose.yml para PostgreSQL e PgAdmin (ver na raiz do DSMovie-Monorepo, onde estão as portas, usuários e senhas para a rede docker)
+* Lembrar de trocar a porta de 5432 para 5433 em src/main/resources/application-dev.properties
+```
+spring.datasource.url=jdbc:postgresql://localhost:5433/dsmovie
+```
+
+#### Sequência correta para executar a aplicação com Docker:
+Executar Docker Desktop<br>
+No terminal aberto na pasta onde há o docker-compose.yml, executar o seguinte comando:
+```
+docker compose up -d
+```
+No navegador, acessar PgAdmin pela seguinte URL:<br>
+http://localhost:5051
+<br>Ver usuário e senha no docker-compose.yml<br>
+Criar servidor, banco de dados, tabelas e inserir dados com o mesmo passo a passo usado para testes locais sem Docker (ver mais acima)<br>
+Executar aplicação na IDE.<br>
+Fazer testes de requisições no Postman (com o host http://localhost:8080, seguido das respectivas rotas das requisições).<br>
 
 
 ## Perfil prod (Criar conta em servidor):
@@ -306,5 +386,31 @@ Testar. Se não ocorrer erro, pode-se colocar {{host}} nas demais requisições.
 
 Obs.: banco de dados e API poderiam ser implantados na mesma instância no Railway.
 
+## Sobre diretrizes de segurança para bancos de dados em nuvem
+### Fase 1: arquitetura e isolamento de rede (antes de criar o banco):
+* Redes privadas (VPC/Subnets): nunca expor o banco diretamente à internet pública. Colocá-lo em uma sub-rede privada dentro da nuvem.
+* Firewalls e Grupos de Segurança: bloquear todas as portas de entrada por padrão. Liberar a porta do banco (ex: 5432 do Postgres) estritamente para os IPs da aplicação do responsável autorizado ou da VPN da empresa. 
+* Acesso via Bastion Host / SSH Tunnel: Para os desenvolvedores acessarem o banco via pgAdmin, eles devem passar por um servidor intermediário seguro (Bastion) usando chaves SSH criptografadas.
+* Conexões VPN/Cloudflare Tunnel: utilizar túneis autenticados e criptografados para que o tráfego da equipe até a nuvem não passe pela internet aberta.
 
+### Fase 2: configuração e Autenticação (No momento da criação):
+* Criptografia em repouso (At Rest): ativar a criptografia nos discos do servidor de banco de dados usando chaves gerenciadas (como AWS KMS). Em caso de roubo do disco, os dados são ilegíveis.
+* Criptografia em trânsito (In Transit): forçar o uso de conexões SSL/TLS obrigatórias para qualquer cliente que tente se conectar ao banco.
+* Princípio do menor privilégio (PoLP): nunca usar o usuário postgres ou root na aplicação. Criar usuários específicos: um para a app (apenas ler/escrever), um para migrações (que pode alterar tabelas) e um para cada desenvolvedor (analítico).
+* Integração com IAM / Provedores de Identidade: Em grandes empresas, integrar o acesso ao banco com o Active Directory ou Okta. Remover o uso de senhas estáticas e adicionar tokens temporários.
+
+### Fase 3: blindagem dos Gerenciadores (No PC dos Desenvolvedores):
+* Senha mestra obrigatória: configurar o pgAdmin/DBeaver para exigir uma senha complexa ao ser iniciado, bloqueando o acesso caso a máquina física seja roubada ou invadida.
+* Proibição de Senhas Salvas: estabelecer como política da empresa que senhas de ambientes de produção nunca sejam marcadas como "salvar senha" nos gerenciadores locais.
+* Políticas de endpoint (MDM): as máquinas dos desenvolvedores devem ter antivírus ativo, criptografia de disco de fábrica (BitLocker/FileVault) e bloqueio de tela automático após 1 minuto de inatividade.
+
+### Fase 4: operação, monitoramento e auditoria (com o banco em produção):
+* Logs de auditoria (pgAudit): ativar a extensão de auditoria no banco de dados para registrar detalhadamente quem leu ou alterou tabelas sensíveis (como dados de clientes ou financeiros).
+* Mascaramento de dados (Data Masking): garantir que dados sensíveis (CPF, cartões de crédito) apareçam borrados ou modificados quando desenvolvedores fizerem consultas em ambientes de homologação ou testes.
+* Análise de vulnerabilidades automatizada: utilizar ferramentas que varrem o banco em busca de configurações fracas, privilégios excessivos ou falta de patches de segurança.
+* Gestão de segredos (Secret Managers): nunca salvar a senha do banco no código-fonte do GitHub. Usar serviços como AWS Secrets Manager, HashiCorp Vault ou as variáveis protegidas do Railway para injetar a senha em tempo de execução.
+
+### Fase 5: continuidade de Negócios e resiliência (plano de Contingência):
+* Backups criptografados e isolados: configurar backups automáticos diários. Garantir que os arquivos de backup estejam criptografados e armazenados em uma conta de nuvem separada (para evitar exclusão por ransomware).
+* Testes de restauração periódicos: um backup que nunca foi testado não é um backup. Simular mensalmente a recuperação do banco para garantir que os dados não estão corrompidos.
 
